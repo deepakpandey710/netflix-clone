@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import Navbar from "../components/Navbar";
 import backgroundImage from "../assets/home.jpg";
 import movieLogo from "../assets/homeTitle.webp"
@@ -6,10 +6,26 @@ import { FaPlay } from "react-icons/fa";
 import { AiOutlineInfoCircle } from "react-icons/ai"
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchMovies, getGenres } from "../store";
+import Slider from "../components/Slider";
 
 export default function Netflix() {
   const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
+  const genresLoaded = useSelector((state) => state.netflix.genresLoaded);
+  const dispatch = useDispatch();
+  const movies = useSelector((state) => state.netflix.movies);
+  useEffect(() => {
+    dispatch(getGenres());
+    // console.log('movies',movies)
+  }, []);
+
+  useEffect(() => {
+    // console.log(movies)
+    if (genresLoaded) dispatch(fetchMovies({ type: "all" }))
+  },[genresLoaded])
+
   window.onscroll = () => {
     setIsScrolled(window.pageYOffset === 0 ? false : true);
     return () => (window.onscroll = null);
@@ -18,22 +34,23 @@ export default function Netflix() {
   return (
     <Container>
       <Navbar isScrolled={isScrolled} />
-     <div className="hero">
-      <img src={backgroundImage} alt="background" className="background-image"/>
-      <div className="container">
-        <div className="logo">
-          <img src={movieLogo} className="Movie logo" alt="movielogo"/>
-        </div>
-        <div className="buttons flex">
-          <button className="flex j-center a-center" onClick={()=>navigate("/player")}>
-            <FaPlay />Play
-          </button>
-          <button className="flex a-center j-center">
-            <AiOutlineInfoCircle /> More Info
-          </button>
+      <div className="hero">
+        <img src={backgroundImage} alt="background" className="background-image" />
+        <div className="container">
+          <div className="logo">
+            <img src={movieLogo} className="Movie logo" alt="movielogo" />
+          </div>
+          <div className="buttons flex">
+            <button className="flex j-center a-center" onClick={() => navigate("/player")}>
+              <FaPlay />Play
+            </button>
+            <button className="flex a-center j-center">
+              <AiOutlineInfoCircle /> More Info
+            </button>
+          </div>
         </div>
       </div>
-     </div>
+      <Slider movies={movies} />
     </Container>
   )
 };
