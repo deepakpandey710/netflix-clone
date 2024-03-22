@@ -27,7 +27,6 @@ export default function CardSlider({ data, title }) {
       className="flex column"
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => setShowControls(false)}
-
     >
       <h1>{title}</h1>
       <div className="wrapper">

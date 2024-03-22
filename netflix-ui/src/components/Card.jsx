@@ -7,11 +7,36 @@ import { RiThumbUpFill, RiThumbDownFill } from "react-icons/ri";
 import { BsCheck } from "react-icons/bs";
 import { AiOutlinePlus } from "react-icons/ai";
 import { BiChevronDown } from "react-icons/bi";
-
+import axios from 'axios';
+import { onAuthStateChanged } from "firebase/auth";
+import { firebaseAuth } from "../utils/firebase-config";
+import {useDispatch} from "react-redux"
+import { getAllLikedMovies } from "../store";
 
 export default function Card({ movieData, isLiked = false }) {
   const [isHovered, setIsHovered] = useState(false);
+  const [email,setEmail] =useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const addToList = async ()=>{
+    try {
+      await axios.post("http://localhost:5000/api/user/add", {
+        email,
+        data: movieData,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  onAuthStateChanged(firebaseAuth, (currentUser) => {
+    if (currentUser) {
+      setEmail(currentUser.email);
+    }
+    else{
+      navigate('/login');
+    }
+  })
   return (
     <Container onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
       <img src={`https://image.tmdb.org/t/p/w500${movieData.image}`} alt="movie" />
@@ -35,7 +60,7 @@ export default function Card({ movieData, isLiked = false }) {
                     <BsCheck title="Remove From List"/>
                   )
                   :(
-                    <AiOutlinePlus  title="Add to my List"/>
+                    <AiOutlinePlus  title="Add to my List" onClick={addToList}/>
                   )
                 }
               </div>
