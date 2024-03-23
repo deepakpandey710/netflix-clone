@@ -11,7 +11,7 @@ import axios from 'axios';
 import { onAuthStateChanged } from "firebase/auth";
 import { firebaseAuth } from "../utils/firebase-config";
 import { useDispatch } from "react-redux"
-import { getAllLikedMovies, removeMovieFromLiked } from "../store";
+import { removeMovieFromLiked } from "../store";
 
 export default function Card({ movieData, isLiked = false }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -30,7 +30,7 @@ export default function Card({ movieData, isLiked = false }) {
     }
   }
   const removeFromLikedList = async () => {
-    dispatch(removeMovieFromLiked({email,movieId:movieData.id}));
+    dispatch(removeMovieFromLiked({ email, movieId: movieData.id }));
   }
   onAuthStateChanged(firebaseAuth, (currentUser) => {
     if (currentUser) {
@@ -74,9 +74,9 @@ export default function Card({ movieData, isLiked = false }) {
             </div>
             <div className="genres flex">
               <ul className="flex">
-                {movieData.genres.map((genre) => {
+                {movieData.genres.map((genre) =>
                   <li key={genre}>{genre}</li>
-                })}
+                )}
               </ul>
             </div>
           </div>

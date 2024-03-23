@@ -1,4 +1,3 @@
-import axios from "axios";
 import { onAuthStateChanged } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -25,6 +24,7 @@ export default function UserListedMovies() {
     if (email) {
       dispatch(getUsersLikedMovies(email));
     }
+    // eslint-disable-next-line
   }, [email]);
 
   window.onscroll = () => {

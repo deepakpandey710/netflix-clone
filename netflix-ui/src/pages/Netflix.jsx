@@ -18,10 +18,12 @@ export default function Netflix() {
   const movies = useSelector((state) => state.netflix.movies);
   useEffect(() => {
     dispatch(getGenres());
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     if (genresLoaded) dispatch(fetchMovies({ type: "all" }))
+    // eslint-disable-next-line
   },[genresLoaded])
 
   window.onscroll = () => {

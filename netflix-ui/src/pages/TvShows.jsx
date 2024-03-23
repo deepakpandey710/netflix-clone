@@ -19,10 +19,12 @@ export default function TvShows() {
     const genres = useSelector((state) => state.netflix.genres);
     useEffect(() => {
         dispatch(getGenres());
+        // eslint-disable-next-line
     }, []);
 
     useEffect(() => {
         if (genresLoaded) dispatch(fetchMovies({ type: "tv" }))
+        // eslint-disable-next-line
     }, [genresLoaded])
 
     window.onscroll = () => {
@@ -30,7 +32,7 @@ export default function TvShows() {
         return () => (window.onscroll = null);
     }
     onAuthStateChanged(firebaseAuth, (currentUser) => {
-        // if (currentUser) navigate('/');
+        if (!currentUser) navigate('/login');
     })
 
     return (
