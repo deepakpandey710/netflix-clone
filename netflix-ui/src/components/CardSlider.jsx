@@ -9,19 +9,17 @@ export default function CardSlider({ data, title }) {
   const listRef = useRef();
 
   const handleDirection = (direction) => {
-    let distance = listRef.current.getBoundingClientRect().x-70;
+    let distance = listRef.current.getBoundingClientRect().x - 70;
     if (direction === "left" && sliderPosition > 0) {
-      console.log(direction, sliderPosition,distance);
-      listRef.current.style.transform = `translateX(${230 + distance }px)`;
-      setSliderPosition(sliderPosition-1);
+      listRef.current.style.transform = `translateX(${230 + distance}px)`;
+      setSliderPosition(sliderPosition - 1);
     }
-    if(direction==="right" && sliderPosition<4){
-      console.log(direction, sliderPosition,distance);
-      listRef.current.style.transform = `translateX(${-230+distance }px)`;
-      setSliderPosition(sliderPosition+1);
-
+    if (direction === "right" && sliderPosition < 4) {
+      listRef.current.style.transform = `translateX(${-230 + distance}px)`;
+      setSliderPosition(sliderPosition + 1);
     }
   };
+
   return (
     <Container
       className="flex column"

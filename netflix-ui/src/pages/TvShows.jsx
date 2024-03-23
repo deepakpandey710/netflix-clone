@@ -19,11 +19,9 @@ export default function TvShows() {
     const genres = useSelector((state) => state.netflix.genres);
     useEffect(() => {
         dispatch(getGenres());
-        // console.log('movies',movies)
     }, []);
 
     useEffect(() => {
-        // console.log(movies)
         if (genresLoaded) dispatch(fetchMovies({ type: "tv" }))
     }, [genresLoaded])
 

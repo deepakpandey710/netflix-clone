@@ -10,16 +10,16 @@ import { BiChevronDown } from "react-icons/bi";
 import axios from 'axios';
 import { onAuthStateChanged } from "firebase/auth";
 import { firebaseAuth } from "../utils/firebase-config";
-import {useDispatch} from "react-redux"
-import { getAllLikedMovies } from "../store";
+import { useDispatch } from "react-redux"
+import { getAllLikedMovies, removeMovieFromLiked } from "../store";
 
 export default function Card({ movieData, isLiked = false }) {
   const [isHovered, setIsHovered] = useState(false);
-  const [email,setEmail] =useState('');
+  const [email, setEmail] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const addToList = async ()=>{
+  const addToList = async () => {
     try {
       await axios.post("http://localhost:5000/api/user/add", {
         email,
@@ -29,11 +29,14 @@ export default function Card({ movieData, isLiked = false }) {
       console.log(error);
     }
   }
+  const removeFromLikedList = async () => {
+    dispatch(removeMovieFromLiked({email,movieId:movieData.id}));
+  }
   onAuthStateChanged(firebaseAuth, (currentUser) => {
     if (currentUser) {
       setEmail(currentUser.email);
     }
-    else{
+    else {
       navigate('/login');
     }
   })
@@ -53,25 +56,25 @@ export default function Card({ movieData, isLiked = false }) {
             <div className="icons flex j-between">
               <div className="controls flex">
                 <IoPlayCircleSharp title="play" onClick={() => navigate("/player")} />
-                <RiThumbUpFill title="Like"/>
-                <RiThumbDownFill title="Dislike"/>
+                <RiThumbUpFill title="Like" />
+                <RiThumbDownFill title="Dislike" />
                 {
-                  isLiked?(
-                    <BsCheck title="Remove From List"/>
+                  isLiked ? (
+                    <BsCheck title="Remove From List" onClick={removeFromLikedList} />
                   )
-                  :(
-                    <AiOutlinePlus  title="Add to my List" onClick={addToList}/>
-                  )
+                    : (
+                      <AiOutlinePlus title="Add to my List" onClick={addToList} />
+                    )
                 }
               </div>
               <div className="info">
-                <BiChevronDown title="More Info"/>
+                <BiChevronDown title="More Info" />
 
               </div>
             </div>
             <div className="genres flex">
               <ul className="flex">
-                {movieData.genres.map((genre)=>{
+                {movieData.genres.map((genre) => {
                   <li key={genre}>{genre}</li>
                 })}
               </ul>

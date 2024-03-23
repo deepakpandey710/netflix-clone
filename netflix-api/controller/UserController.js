@@ -30,11 +30,33 @@ module.exports.addToLikedMovies = async (req, res) => {
 };
 
 module.exports.getAllLikedMovies = async (req, res) => {
+    try {
+        const { email } = req.params;
+        const data = await User.findOne({ email });
+        return res.json({ movies: data.likedMovies });
+    } catch (err) {
+        return res.json({ msg: "Error fetching data" });
+    }
+};
+module.exports.removeFromLikedList = async (req, res) => {
     try{
-        const {email}=req.params;
-        const data= await User.findOne({email});
-        return res.json({movies: data.likedMovies});
+        const {email, movieId}=req.body;
+        const user= await User.findOne({email});
+        if(user){
+            const movieList = user.likedMovies;
+            const index = movieList.findIndex(({id})=>id===movieId);
+            if(index!==-1){
+                movieList.splice(index,1)
+                await User.updateOne({email},{likedMovies:movieList});
+                return res.json({msg:"removed from liked list",movies:movieList});
+            }else{
+                return res.json({msg:"movie is not present in liked list",movies:movieList});
+            }
+        }else{
+            return res.json({msg:"user not found",movies:[]});
+        }
     }catch(err){
-        return res.json({msg:"Error fetching data"});
+        console.log(err)
+        return res.json({msg:"some error occured",movies:[]});
     }
 };

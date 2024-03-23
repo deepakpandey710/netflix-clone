@@ -18,11 +18,9 @@ export default function Netflix() {
   const movies = useSelector((state) => state.netflix.movies);
   useEffect(() => {
     dispatch(getGenres());
-    // console.log('movies',movies)
   }, []);
 
   useEffect(() => {
-    // console.log(movies)
     if (genresLoaded) dispatch(fetchMovies({ type: "all" }))
   },[genresLoaded])
 

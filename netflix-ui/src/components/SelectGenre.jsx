@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import { getDataByGenre } from "../store";
 export default function SelectGenre({ genres, type }) {
   const dispatch = useDispatch();
-  console.log("select genres", genres);
   return (
     <Select className="flex" onChange={(e) => dispatch(getDataByGenre({genre:e.target.value, type}))}>
       {
